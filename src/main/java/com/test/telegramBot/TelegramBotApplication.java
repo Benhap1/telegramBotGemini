@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 
 @SpringBootApplication
+@EnableScheduling
 public class TelegramBotApplication {
 
     public static void main(String[] args) {
@@ -40,6 +42,7 @@ public class TelegramBotApplication {
         return bot;
     }
 
+
     @Bean
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
@@ -51,4 +54,10 @@ public class TelegramBotApplication {
                                            ObjectMapper objectMapper) {
         return new GeminiApiClient(apiKey, webClientBuilder, objectMapper);
     }
+
+    @Bean
+    public HolidaysParser holidaysParser(Ben4inBot bot) {
+        return new HolidaysParser(bot);
+    }
+
 }
